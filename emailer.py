@@ -32,7 +32,7 @@ def extract_first_name(email: str) -> str:
     if not parts:
         return ""
     first = parts[0]
-    if first in GENERIC_PREFIXES or len(first) < 2:
+    if first in GENERIC_PREFIXES or len(first) < 2 or len(first) > 12:
         return ""
     if re.search(r"\d", first):
         return ""
