@@ -6,8 +6,10 @@ from scraper import get_pain_question
 
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
-FROM_EMAIL = "oluwadameelola@gmail.com"
 FROM_NAME = "Damilola"
+
+ACCOUNT_1 = "oluwadameelola@gmail.com"   # 8am and 3pm runs
+ACCOUNT_2 = "bamee221@gmail.com"          # 12pm run
 
 SUBJECT_VARIANTS = [
     "quick question",
@@ -104,42 +106,42 @@ Feel free to reply whenever it becomes a priority.
 # ---------------------------------------------------------------------------
 
 
-def send_email(to_email: str, business_name: str, category: str, location: str, password: str) -> bool:
+def send_email(to_email: str, business_name: str, category: str, location: str, password: str, from_email: str = ACCOUNT_1) -> bool:
     subject = build_subject()
     body = build_body(business_name, category, location, to_email)
 
     msg = MIMEMultipart()
-    msg["From"] = f"{FROM_NAME} <{FROM_EMAIL}>"
+    msg["From"] = f"{FROM_NAME} <{from_email}>"
     msg["To"] = to_email
     msg["Subject"] = subject
     msg.attach(MIMEText(body, "plain"))
 
     try:
         with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, timeout=15) as server:
-            server.login(FROM_EMAIL, password)
-            server.sendmail(FROM_EMAIL, to_email, msg.as_string())
-        print(f"  [email] Sent to {to_email}")
+            server.login(from_email, password)
+            server.sendmail(from_email, to_email, msg.as_string())
+        print(f"  [email] Sent to {to_email} via {from_email}")
         return True
     except Exception as e:
         print(f"  [email] Failed to send to {to_email}: {e}")
         return False
 
 
-def send_followup(to_email: str, business_name: str, category: str, followup_day: int, password: str) -> bool:
+def send_followup(to_email: str, business_name: str, category: str, followup_day: int, password: str, from_email: str = ACCOUNT_1) -> bool:
     subject = "Re: quick question"
     body = build_followup_body(business_name, category, followup_day, to_email)
 
     msg = MIMEMultipart()
-    msg["From"] = f"{FROM_NAME} <{FROM_EMAIL}>"
+    msg["From"] = f"{FROM_NAME} <{from_email}>"
     msg["To"] = to_email
     msg["Subject"] = subject
     msg.attach(MIMEText(body, "plain"))
 
     try:
         with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, timeout=15) as server:
-            server.login(FROM_EMAIL, password)
-            server.sendmail(FROM_EMAIL, to_email, msg.as_string())
-        print(f"  [follow up {followup_day}] Sent to {to_email}")
+            server.login(from_email, password)
+            server.sendmail(from_email, to_email, msg.as_string())
+        print(f"  [follow up {followup_day}] Sent to {to_email} via {from_email}")
         return True
     except Exception as e:
         print(f"  [follow up {followup_day}] Failed to send to {to_email}: {e}")

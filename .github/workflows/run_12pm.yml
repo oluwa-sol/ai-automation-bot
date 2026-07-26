@@ -26,7 +26,7 @@ jobs:
       - name: Write credentials
         run: |
           echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
-          echo '{"gmail_password": "${{ secrets.GMAIL_PASSWORD }}"}' > saved_config.json
+          echo '{"gmail_password": "${{ secrets.GMAIL_PASSWORD }}", "gmail_password_2": "${{ secrets.GMAIL_PASSWORD_2 }}"}' > saved_config.json
 
       - name: Run 12pm scrape
         env:

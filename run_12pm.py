@@ -6,7 +6,9 @@ from emailer import send_email
 from sheets import get_or_create_sheet, get_existing_names, append_lead
 
 with open("saved_config.json") as f:
-    PASSWORD = json.load(f)["gmail_password"]
+    cfg = json.load(f)
+PASSWORD = cfg["gmail_password_2"]
+FROM_EMAIL = "bamee221@gmail.com"
 
 SHEET = "AI Automation Leads"
 CREDENTIALS = "credentials.json"
@@ -39,7 +41,7 @@ def run(category, location):
             continue
         lead["email"] = email
         if append_lead(sheet, lead, existing):
-            send_email(email, lead["name"], category, location, PASSWORD)
+            send_email(email, lead["name"], category, location, PASSWORD, FROM_EMAIL)
 
 
 for cat, loc in SEARCHES:
