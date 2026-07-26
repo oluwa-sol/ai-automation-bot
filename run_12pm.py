@@ -1,4 +1,4 @@
-"""3pm run: Trade and lifestyle businesses."""
+"""12pm run: Finance and legal services."""
 import json
 from scraper import scrape_maps
 from email_finder import find_email
@@ -12,15 +12,18 @@ SHEET = "AI Automation Leads"
 CREDENTIALS = "credentials.json"
 
 SEARCHES = [
-    ("car dealership", "Phoenix, USA"),
-    ("car dealership", "Calgary, Canada"),
-    ("car dealership", "Manchester, UK"),
-    ("property management", "Denver, USA"),
-    ("property management", "Auckland, New Zealand"),
-    ("property management", "Glasgow, Scotland"),
-    ("driving school", "Birmingham, UK"),
-    ("driving school", "Dublin, Ireland"),
-    ("driving school", "Brisbane, Australia"),
+    ("insurance broker", "Toronto, Canada"),
+    ("insurance broker", "Melbourne, Australia"),
+    ("insurance broker", "Cape Town, South Africa"),
+    ("accounting firm", "Dublin, Ireland"),
+    ("accounting firm", "Auckland, New Zealand"),
+    ("accounting firm", "Calgary, Canada"),
+    ("law firm", "Sydney, Australia"),
+    ("law firm", "Vancouver, Canada"),
+    ("law firm", "Edinburgh, Scotland"),
+    ("real estate agent", "Ottawa, Canada"),
+    ("real estate agent", "Perth, Australia"),
+    ("real estate agent", "Dublin, Ireland"),
 ]
 
 
@@ -45,4 +48,4 @@ for cat, loc in SEARCHES:
     except Exception as e:
         print(f"  [!] Failed {cat} / {loc}: {e}")
 
-print("\n[done] 3pm run complete.")
+print("\n[done] 12pm run complete.")

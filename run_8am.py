@@ -1,6 +1,5 @@
-"""8am run: Dental clinics and salons in English-speaking cities."""
+"""8am run: Healthcare and professional services."""
 import json
-from main import *
 from scraper import scrape_maps
 from email_finder import find_email
 from emailer import send_email
@@ -15,10 +14,16 @@ CREDENTIALS = "credentials.json"
 SEARCHES = [
     ("dental clinic", "Calgary, Canada"),
     ("dental clinic", "Brisbane, Australia"),
-    ("hair salon", "Warsaw, Poland"),
-    ("hair salon", "Prague, Czech Republic"),
-    ("spa", "Budapest, Hungary"),
-    ("chiropractic", "Ottawa, Canada"),
+    ("dental clinic", "Dublin, Ireland"),
+    ("mortgage broker", "Toronto, Canada"),
+    ("mortgage broker", "Melbourne, Australia"),
+    ("mortgage broker", "Auckland, New Zealand"),
+    ("vet clinic", "Ottawa, Canada"),
+    ("vet clinic", "Perth, Australia"),
+    ("vet clinic", "Edinburgh, Scotland"),
+    ("immigration consultant", "London, UK"),
+    ("immigration consultant", "Sydney, Australia"),
+    ("immigration consultant", "Vancouver, Canada"),
 ]
 
 
