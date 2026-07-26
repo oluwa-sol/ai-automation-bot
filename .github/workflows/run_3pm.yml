@@ -1,0 +1,34 @@
+name: Run 3pm Scrape
+
+on:
+  schedule:
+    - cron: "0 12 * * *"  # 15:00 EEST (UTC+3)
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium --with-deps
+
+      - name: Write credentials
+        run: |
+          echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
+          echo '{"gmail_password": "${{ secrets.GMAIL_PASSWORD }}"}' > saved_config.json
+
+      - name: Run 3pm scrape
+        env:
+          HEADLESS: "1"
+        run: python run_3pm.py

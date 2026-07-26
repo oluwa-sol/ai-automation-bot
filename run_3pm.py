@@ -1,0 +1,45 @@
+"""3pm run: Law firms, real estate, gyms in English-speaking cities."""
+import json
+from scraper import scrape_maps
+from email_finder import find_email
+from emailer import send_email
+from sheets import get_or_create_sheet, get_existing_names, append_lead
+
+with open("saved_config.json") as f:
+    PASSWORD = json.load(f)["gmail_password"]
+
+SHEET = "AI Automation Leads"
+CREDENTIALS = "credentials.json"
+
+SEARCHES = [
+    ("law firm", "Toronto, Canada"),
+    ("law firm", "Melbourne, Australia"),
+    ("real estate agent", "Winnipeg, Canada"),
+    ("real estate agent", "Gold Coast, Australia"),
+    ("gym", "Lisbon, Portugal"),
+    ("accounting firm", "Dublin, Ireland"),
+]
+
+
+def run(category, location):
+    print(f"\n[*] {category} — {location}")
+    sheet = get_or_create_sheet(SHEET, CREDENTIALS)
+    existing = get_existing_names(sheet)
+    leads = scrape_maps(category, location)
+    print(f"  Found {len(leads)} candidates")
+    for lead in leads:
+        email = find_email(lead["name"], location, lead.get("website", ""))
+        if not email:
+            continue
+        lead["email"] = email
+        if append_lead(sheet, lead, existing):
+            send_email(email, lead["name"], category, location, PASSWORD)
+
+
+for cat, loc in SEARCHES:
+    try:
+        run(cat, loc)
+    except Exception as e:
+        print(f"  [!] Failed {cat} / {loc}: {e}")
+
+print("\n[done] 3pm run complete.")
