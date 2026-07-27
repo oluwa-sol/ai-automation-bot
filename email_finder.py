@@ -18,6 +18,8 @@ NOISE_DOMAINS = {
 
 NOISE_KEYWORDS = {"privacy", "terms", "policy", "legal", "noreply", "no-reply", "unsubscribe"}
 
+TEMPLATE_PATTERNS = re.compile(r"[\$#%]\{|__email__|your@email|\[email\]", re.IGNORECASE)
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -33,6 +35,8 @@ def is_valid_email(email: str) -> bool:
     if domain in NOISE_DOMAINS:
         return False
     if any(k in local for k in NOISE_KEYWORDS):
+        return False
+    if TEMPLATE_PATTERNS.search(email):
         return False
     return True
 
