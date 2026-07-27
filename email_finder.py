@@ -29,7 +29,23 @@ HEADERS = {
 }
 
 
+JUNK_PREFIXES = ("email", "mailto", "e-mail", "mail", "contact", "tel", "phone", "fax")
+
+
+def clean_email(email: str) -> str:
+    """Strip junk text that sometimes gets concatenated before the local part."""
+    local, domain = email.split("@", 1)
+    for prefix in JUNK_PREFIXES:
+        if local.lower().startswith(prefix) and len(local) > len(prefix):
+            candidate = local[len(prefix):]
+            if candidate and candidate[0].isalpha():
+                local = candidate
+                break
+    return f"{local}@{domain}"
+
+
 def is_valid_email(email: str) -> bool:
+    email = clean_email(email)
     domain = email.split("@")[-1].lower()
     local = email.split("@")[0].lower()
     if domain in NOISE_DOMAINS:
@@ -42,7 +58,7 @@ def is_valid_email(email: str) -> bool:
 
 
 def extract_emails_from_text(text: str) -> list[str]:
-    return [e for e in EMAIL_RE.findall(text) if is_valid_email(e)]
+    return [clean_email(e) for e in EMAIL_RE.findall(text) if is_valid_email(e)]
 
 
 def scrape_page_for_email(url: str) -> str:
