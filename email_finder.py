@@ -14,6 +14,9 @@ NOISE_DOMAINS = {
     "google.com", "facebook.com", "instagram.com", "tiktok.com",
     "example.com", "sentry.io", "wixpress.com", "squarespace.com",
     "mailchimp.com", "sendgrid.com", "hubspot.com", "zendesk.com",
+    "freelance-banner.com", "yellowpages.com", "whitepages.com",
+    "trulia.com", "zillow.com", "realtor.com", "hotfrog.com",
+    "cylex.com", "brownbook.net", "bizify.co.uk", "freeindex.co.uk",
 }
 
 NOISE_KEYWORDS = {"privacy", "terms", "policy", "legal", "noreply", "no-reply", "unsubscribe"}
