@@ -18,10 +18,12 @@ SUBJECT_VARIANTS = [
 ]
 
 GENERIC_PREFIXES = {
-    "info", "contact", "support", "help", "admin", "office", "hello",
+    "info", "contact", "support", "help", "admin", "office", "hello", "hi",
     "enquiries", "enquiry", "inquiry", "sales", "team", "mail", "email",
     "reception", "general", "customerservice", "customer", "service",
     "bookings", "booking", "noreply", "no-reply", "accounts", "billing",
+    "clinic", "dental", "vet", "legal", "law", "care", "group", "centre",
+    "center", "practice", "studio", "agency", "solutions", "services",
 }
 
 
