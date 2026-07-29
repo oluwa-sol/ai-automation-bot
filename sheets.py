@@ -1,3 +1,4 @@
+import time
 import gspread
 from google.oauth2.service_account import Credentials
 from datetime import date, timedelta
@@ -13,14 +14,24 @@ HEADERS = [
 ]
 
 
-def get_or_create_sheet(sheet_name: str, credentials_file: str = "credentials.json"):
+def get_or_create_sheet(sheet_name: str, credentials_file: str = "credentials.json", retries: int = 5):
     creds = Credentials.from_service_account_file(credentials_file, scopes=SCOPES)
     client = gspread.authorize(creds)
-    spreadsheet = client.open(sheet_name)
-    sheet = spreadsheet.sheet1
-    if sheet.row_count == 0 or sheet.cell(1, 1).value != "Name":
-        sheet.insert_row(HEADERS, 1)
-    return sheet
+
+    for attempt in range(retries):
+        try:
+            spreadsheet = client.open(sheet_name)
+            sheet = spreadsheet.sheet1
+            if sheet.row_count == 0 or sheet.cell(1, 1).value != "Name":
+                sheet.insert_row(HEADERS, 1)
+            return sheet
+        except gspread.exceptions.APIError as e:
+            if attempt < retries - 1:
+                wait = 10 * (attempt + 1)
+                print(f"  [sheets] API error ({e}), retrying in {wait}s...")
+                time.sleep(wait)
+            else:
+                raise
 
 
 def get_existing_names(sheet) -> set:
