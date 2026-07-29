@@ -87,7 +87,7 @@ def extract_review_count(page) -> int:
     return 0
 
 
-def scrape_maps(category: str, location: str, max_results: int = 10) -> list[dict]:
+def scrape_maps(category: str, location: str, max_results: int = 20) -> list[dict]:
     leads = []
     query = build_query(category, location)
     print(f"  [scraper] Query: {query}")

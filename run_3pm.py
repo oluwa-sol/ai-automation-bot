@@ -17,12 +17,21 @@ SEARCHES = [
     ("car dealership", "Phoenix, USA"),
     ("car dealership", "Calgary, Canada"),
     ("car dealership", "Manchester, UK"),
+    ("car dealership", "Las Vegas, USA"),
+    ("car dealership", "Edmonton, Canada"),
+    ("car dealership", "Leeds, UK"),
     ("property management", "Denver, USA"),
     ("property management", "Auckland, New Zealand"),
     ("property management", "Glasgow, Scotland"),
+    ("property management", "Austin, USA"),
+    ("property management", "Christchurch, New Zealand"),
+    ("property management", "Edinburgh, Scotland"),
     ("driving school", "Birmingham, UK"),
     ("driving school", "Dublin, Ireland"),
     ("driving school", "Brisbane, Australia"),
+    ("driving school", "Leeds, UK"),
+    ("driving school", "Cork, Ireland"),
+    ("driving school", "Adelaide, Australia"),
 ]
 
 
