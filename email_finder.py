@@ -68,7 +68,7 @@ def scrape_page_for_email(url: str) -> str:
     try:
         r = requests.get(url, timeout=8, headers=HEADERS)
         soup = BeautifulSoup(r.text, "html.parser")
-        emails = extract_emails_from_text(soup.get_text())
+        emails = extract_emails_from_text(soup.get_text(" "))
         if emails:
             return emails[0]
         # Also check mailto links
