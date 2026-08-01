@@ -12,9 +12,9 @@ ACCOUNT_1 = "oluwadameelola@gmail.com"   # 8am and 3pm runs
 ACCOUNT_2 = "bamee221@gmail.com"          # 12pm run
 
 SUBJECT_VARIANTS = [
-    "quick question",
-    "just a quick one",
-    "had a question for you",
+    "found {name} on Maps",
+    "saw {name} in {city}",
+    "came across {name} online",
 ]
 
 GENERIC_PREFIXES = {
@@ -41,10 +41,12 @@ def extract_first_name(email: str) -> str:
     return first.capitalize()
 
 
-def build_subject() -> str:
+def build_subject(business_name: str, location: str) -> str:
     from datetime import date
+    city = location.split(",")[0].strip()
     day = date.today().toordinal()
-    return SUBJECT_VARIANTS[day % len(SUBJECT_VARIANTS)]
+    template = SUBJECT_VARIANTS[day % len(SUBJECT_VARIANTS)]
+    return template.format(name=business_name, city=city)
 
 
 def build_body(business_name: str, category: str, location: str, email: str = "") -> str:
@@ -109,7 +111,7 @@ Feel free to reply whenever it becomes a priority.
 
 
 def send_email(to_email: str, business_name: str, category: str, location: str, password: str, from_email: str = ACCOUNT_1) -> bool:
-    subject = build_subject()
+    subject = build_subject(business_name, location)
     body = build_body(business_name, category, location, to_email)
 
     msg = MIMEMultipart()
@@ -130,7 +132,7 @@ def send_email(to_email: str, business_name: str, category: str, location: str, 
 
 
 def send_followup(to_email: str, business_name: str, category: str, followup_day: int, password: str, from_email: str = ACCOUNT_1) -> bool:
-    subject = "Re: quick question"
+    subject = f"Re: {business_name}"
     body = build_followup_body(business_name, category, followup_day, to_email)
 
     msg = MIMEMultipart()

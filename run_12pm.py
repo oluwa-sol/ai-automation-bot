@@ -1,4 +1,4 @@
-"""12pm run: Finance and legal services."""
+"""12pm run: Finance, legal, hair salon, spa."""
 import json
 from scraper import scrape_maps
 from email_finder import find_email
@@ -14,12 +14,14 @@ SHEET = "AI Automation Leads"
 CREDENTIALS = "credentials.json"
 
 SEARCHES = [
-    ("insurance broker", "Toronto, Canada"),
-    ("insurance broker", "Melbourne, Australia"),
-    ("insurance broker", "Cape Town, South Africa"),
-    ("insurance broker", "Calgary, Canada"),
-    ("insurance broker", "Brisbane, Australia"),
-    ("insurance broker", "Johannesburg, South Africa"),
+    ("hair salon", "London, UK"),
+    ("hair salon", "Dublin, Ireland"),
+    ("hair salon", "Edinburgh, Scotland"),
+    ("hair salon", "Cape Town, South Africa"),
+    ("spa", "London, UK"),
+    ("spa", "Dublin, Ireland"),
+    ("spa", "Sydney, Australia"),
+    ("spa", "Auckland, New Zealand"),
     ("accounting firm", "Dublin, Ireland"),
     ("accounting firm", "Auckland, New Zealand"),
     ("accounting firm", "Calgary, Canada"),

@@ -1,4 +1,4 @@
-"""3pm run: Trade and lifestyle businesses."""
+"""3pm run: Trade, lifestyle, gym."""
 import json
 from scraper import scrape_maps
 from email_finder import find_email
@@ -26,12 +26,10 @@ SEARCHES = [
     ("property management", "Austin, USA"),
     ("property management", "Christchurch, New Zealand"),
     ("property management", "Edinburgh, Scotland"),
-    ("driving school", "Birmingham, UK"),
-    ("driving school", "Dublin, Ireland"),
-    ("driving school", "Brisbane, Australia"),
-    ("driving school", "Leeds, UK"),
-    ("driving school", "Cork, Ireland"),
-    ("driving school", "Adelaide, Australia"),
+    ("gym", "Toronto, Canada"),
+    ("gym", "Calgary, Canada"),
+    ("gym", "Dublin, Ireland"),
+    ("gym", "Manchester, UK"),
 ]
 
 

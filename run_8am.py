@@ -1,4 +1,4 @@
-"""8am run: Healthcare and professional services."""
+"""8am run: Healthcare, professional services, physiotherapy."""
 import json
 from scraper import scrape_maps
 from email_finder import find_email
@@ -32,12 +32,10 @@ SEARCHES = [
     ("vet clinic", "Hamilton, Canada"),
     ("vet clinic", "Canberra, Australia"),
     ("vet clinic", "Glasgow, Scotland"),
-    ("immigration consultant", "London, UK"),
-    ("immigration consultant", "Sydney, Australia"),
-    ("immigration consultant", "Vancouver, Canada"),
-    ("immigration consultant", "Manchester, UK"),
-    ("immigration consultant", "Auckland, New Zealand"),
-    ("immigration consultant", "Calgary, Canada"),
+    ("physiotherapy clinic", "Melbourne, Australia"),
+    ("physiotherapy clinic", "Dublin, Ireland"),
+    ("physiotherapy clinic", "Edinburgh, Scotland"),
+    ("physiotherapy clinic", "Auckland, New Zealand"),
 ]
 
 
