@@ -17,7 +17,18 @@ NOISE_DOMAINS = {
     "freelance-banner.com", "yellowpages.com", "whitepages.com",
     "trulia.com", "zillow.com", "realtor.com", "hotfrog.com",
     "cylex.com", "brownbook.net", "bizify.co.uk", "freeindex.co.uk",
+    "godaddy.com",
 }
+
+BLOCKED_EMAILS = {
+    "filler@godaddy.com",
+}
+
+# Government domain suffixes to block across all target countries
+GOV_SUFFIXES = (
+    ".gov", ".gov.au", ".gov.uk", ".gov.ca", ".gov.nz", ".govt.nz",
+    ".gov.ie", ".gov.za", ".gov.sg", ".gov.in",
+)
 
 NOISE_KEYWORDS = {"privacy", "terms", "policy", "legal", "noreply", "no-reply", "unsubscribe"}
 
@@ -51,7 +62,11 @@ def is_valid_email(email: str) -> bool:
     email = clean_email(email)
     domain = email.split("@")[-1].lower()
     local = email.split("@")[0].lower()
+    if email.lower() in BLOCKED_EMAILS:
+        return False
     if domain in NOISE_DOMAINS:
+        return False
+    if any(domain.endswith(suffix) for suffix in GOV_SUFFIXES):
         return False
     if any(k in local for k in NOISE_KEYWORDS):
         return False
