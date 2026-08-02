@@ -22,6 +22,11 @@ NOISE_DOMAINS = {
 
 BLOCKED_EMAILS = {
     "filler@godaddy.com",
+    "info@saloniki.net",
+    "info@tailormade.gr",
+    "z@yahoo.gr",
+    "liberica.cafe@gmail.com",
+    "email@domain.com",
 }
 
 # Government domain suffixes to block across all target countries
