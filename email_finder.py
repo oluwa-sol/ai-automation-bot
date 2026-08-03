@@ -75,6 +75,9 @@ def is_valid_email(email: str) -> bool:
         return False
     if any(k in local for k in NOISE_KEYWORDS):
         return False
+    tld = domain.split(".")[-1]
+    if len(tld) > 6:
+        return False
     if TEMPLATE_PATTERNS.search(email):
         return False
     return True
