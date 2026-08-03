@@ -17,7 +17,7 @@ NOISE_DOMAINS = {
     "freelance-banner.com", "yellowpages.com", "whitepages.com",
     "trulia.com", "zillow.com", "realtor.com", "hotfrog.com",
     "cylex.com", "brownbook.net", "bizify.co.uk", "freeindex.co.uk",
-    "godaddy.com",
+    "godaddy.com", "mohg.com",
 }
 
 BLOCKED_EMAILS = {
