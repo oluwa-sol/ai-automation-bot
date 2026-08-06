@@ -27,6 +27,10 @@ BLOCKED_EMAILS = {
     "z@yahoo.gr",
     "liberica.cafe@gmail.com",
     "email@domain.com",
+    "contact@neighborpropertymanagement.com",
+    "info@bestottawa.ca",
+    "info@truthlawyers.com",
+    "ibrox@championvet.com",
 }
 
 # Government domain suffixes to block across all target countries
