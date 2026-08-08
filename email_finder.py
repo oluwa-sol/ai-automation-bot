@@ -31,6 +31,7 @@ BLOCKED_EMAILS = {
     "info@bestottawa.ca",
     "info@truthlawyers.com",
     "ibrox@championvet.com",
+    "swissotel.spa@spaandsport.com",
 }
 
 # Government domain suffixes to block across all target countries
