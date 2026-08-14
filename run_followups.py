@@ -10,7 +10,7 @@ SHEET = "AI Automation Leads"
 CREDENTIALS = "credentials.json"
 
 
-def process_followups(followup_day: int, sheet, mail):
+def process_followups(followup_day: int, sheet):
     leads = get_followup_leads(sheet, followup_day)
     print(f"\n[*] Follow up {followup_day}: {len(leads)} leads due today")
 
@@ -19,7 +19,18 @@ def process_followups(followup_day: int, sheet, mail):
         name = lead["name"]
         category = lead["category"]
 
-        if has_replied(mail, email):
+        try:
+            mail = get_imap_connection(PASSWORD)
+            replied = has_replied(mail, email)
+            try:
+                mail.logout()
+            except Exception:
+                pass
+        except Exception as e:
+            print(f"  [imap] Could not check reply for {email}: {e}")
+            replied = False
+
+        if replied:
             print(f"  [replied] {name} — marking as Replied")
             mark_replied(sheet, lead["row"])
             continue
@@ -32,10 +43,8 @@ def process_followups(followup_day: int, sheet, mail):
 if __name__ == "__main__":
     print("[*] Starting follow up checks...")
     sheet = get_or_create_sheet(SHEET, CREDENTIALS)
-    mail = get_imap_connection(PASSWORD)
 
-    process_followups(1, sheet, mail)
-    process_followups(2, sheet, mail)
+    process_followups(1, sheet)
+    process_followups(2, sheet)
 
-    mail.logout()
     print("\n[done] Follow up run complete.")
