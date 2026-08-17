@@ -29,6 +29,8 @@ TARGET_CATEGORIES = {
     "accounting":           "How are you currently handling new client onboarding once someone reaches out?",
     "physiotherapy":        "Do you handle appointment reminders and follow-ups manually or do you have something automated?",
     "physio":               "Do you handle appointment reminders and follow-ups manually or do you have something automated?",
+    "physical therapy":     "When a patient no-shows, does someone on your team follow up to rebook them or does that slot just go lost?",
+    "occupational therapy": "When a patient no-shows, does someone on your team follow up to rebook them or does that slot just go lost?",
     "chiropractic":         "Do you handle appointment reminders and follow-ups manually or do you have something automated?",
     "chiropractor":         "Do you handle appointment reminders and follow-ups manually or do you have something automated?",
     "mortgage broker":      "How are you currently chasing clients for documents and keeping them updated through the process?",
