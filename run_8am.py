@@ -36,6 +36,14 @@ SEARCHES = [
     ("physiotherapy clinic", "Dublin, Ireland"),
     ("physiotherapy clinic", "Edinburgh, Scotland"),
     ("physiotherapy clinic", "Auckland, New Zealand"),
+    ("physical therapy", "London, UK"),
+    ("physical therapy", "Dublin, Ireland"),
+    ("physical therapy", "Melbourne, Australia"),
+    ("physical therapy", "Toronto, Canada"),
+    ("occupational therapy", "London, UK"),
+    ("occupational therapy", "Dublin, Ireland"),
+    ("occupational therapy", "Melbourne, Australia"),
+    ("occupational therapy", "Toronto, Canada"),
 ]
 
 
