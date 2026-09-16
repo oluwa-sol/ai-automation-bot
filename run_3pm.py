@@ -1,4 +1,4 @@
-"""3pm run: Trade, lifestyle, gym."""
+"""3pm run: Insurance broker."""
 import json
 from scraper import scrape_maps
 from email_finder import find_email
@@ -14,22 +14,18 @@ SHEET = "AI Automation Leads"
 CREDENTIALS = "credentials.json"
 
 SEARCHES = [
-    ("car dealership", "Phoenix, USA"),
-    ("car dealership", "Calgary, Canada"),
-    ("car dealership", "Manchester, UK"),
-    ("car dealership", "Las Vegas, USA"),
-    ("car dealership", "Edmonton, Canada"),
-    ("car dealership", "Leeds, UK"),
-    ("property management", "Denver, USA"),
-    ("property management", "Auckland, New Zealand"),
-    ("property management", "Glasgow, Scotland"),
-    ("property management", "Austin, USA"),
-    ("property management", "Christchurch, New Zealand"),
-    ("property management", "Edinburgh, Scotland"),
-    ("gym", "Toronto, Canada"),
-    ("gym", "Calgary, Canada"),
-    ("gym", "Dublin, Ireland"),
-    ("gym", "Manchester, UK"),
+    ("insurance broker", "London, UK"),
+    ("insurance broker", "Dublin, Ireland"),
+    ("insurance broker", "Melbourne, Australia"),
+    ("insurance broker", "Toronto, Canada"),
+    ("insurance broker", "Auckland, New Zealand"),
+    ("insurance broker", "Calgary, Canada"),
+    ("insurance broker", "Sydney, Australia"),
+    ("insurance broker", "Edinburgh, Scotland"),
+    ("insurance broker", "Manchester, UK"),
+    ("insurance broker", "Perth, Australia"),
+    ("insurance broker", "Ottawa, Canada"),
+    ("insurance broker", "Leeds, UK"),
 ]
 
 
