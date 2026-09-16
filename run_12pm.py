@@ -1,4 +1,4 @@
-"""12pm run: Finance, legal, hair salon, spa."""
+"""12pm run: HVAC / home services."""
 import json
 from scraper import scrape_maps
 from email_finder import find_email
@@ -14,32 +14,18 @@ SHEET = "AI Automation Leads"
 CREDENTIALS = "credentials.json"
 
 SEARCHES = [
-    ("hair salon", "London, UK"),
-    ("hair salon", "Dublin, Ireland"),
-    ("hair salon", "Edinburgh, Scotland"),
-    ("hair salon", "Cape Town, South Africa"),
-    ("spa", "London, UK"),
-    ("spa", "Dublin, Ireland"),
-    ("spa", "Sydney, Australia"),
-    ("spa", "Auckland, New Zealand"),
-    ("accounting firm", "Dublin, Ireland"),
-    ("accounting firm", "Auckland, New Zealand"),
-    ("accounting firm", "Calgary, Canada"),
-    ("accounting firm", "Cork, Ireland"),
-    ("accounting firm", "Christchurch, New Zealand"),
-    ("accounting firm", "Ottawa, Canada"),
-    ("law firm", "Sydney, Australia"),
-    ("law firm", "Vancouver, Canada"),
-    ("law firm", "Edinburgh, Scotland"),
-    ("law firm", "Melbourne, Australia"),
-    ("law firm", "Toronto, Canada"),
-    ("law firm", "Glasgow, Scotland"),
-    ("real estate agent", "Ottawa, Canada"),
-    ("real estate agent", "Perth, Australia"),
-    ("real estate agent", "Dublin, Ireland"),
-    ("real estate agent", "Edmonton, Canada"),
-    ("real estate agent", "Adelaide, Australia"),
-    ("real estate agent", "Cork, Ireland"),
+    ("hvac company", "London, UK"),
+    ("hvac company", "Dublin, Ireland"),
+    ("hvac company", "Melbourne, Australia"),
+    ("hvac company", "Toronto, Canada"),
+    ("hvac company", "Sydney, Australia"),
+    ("hvac company", "Edinburgh, Scotland"),
+    ("plumbing company", "London, UK"),
+    ("plumbing company", "Dublin, Ireland"),
+    ("plumbing company", "Melbourne, Australia"),
+    ("plumbing company", "Toronto, Canada"),
+    ("plumbing company", "Auckland, New Zealand"),
+    ("plumbing company", "Manchester, UK"),
 ]
 
 
