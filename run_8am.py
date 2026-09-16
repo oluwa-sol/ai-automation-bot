@@ -1,4 +1,4 @@
-"""8am run: Healthcare, professional services, physiotherapy."""
+"""8am run: Med spa / aesthetics."""
 import json
 from scraper import scrape_maps
 from email_finder import find_email
@@ -14,36 +14,18 @@ SHEET = "AI Automation Leads"
 CREDENTIALS = "credentials.json"
 
 SEARCHES = [
-    ("dental clinic", "Calgary, Canada"),
-    ("dental clinic", "Brisbane, Australia"),
-    ("dental clinic", "Dublin, Ireland"),
-    ("dental clinic", "Edmonton, Canada"),
-    ("dental clinic", "Adelaide, Australia"),
-    ("dental clinic", "Cork, Ireland"),
-    ("mortgage broker", "Toronto, Canada"),
-    ("mortgage broker", "Melbourne, Australia"),
-    ("mortgage broker", "Auckland, New Zealand"),
-    ("mortgage broker", "Winnipeg, Canada"),
-    ("mortgage broker", "Christchurch, New Zealand"),
-    ("mortgage broker", "Birmingham, UK"),
-    ("vet clinic", "Ottawa, Canada"),
-    ("vet clinic", "Perth, Australia"),
-    ("vet clinic", "Edinburgh, Scotland"),
-    ("vet clinic", "Hamilton, Canada"),
-    ("vet clinic", "Canberra, Australia"),
-    ("vet clinic", "Glasgow, Scotland"),
-    ("physiotherapy clinic", "Melbourne, Australia"),
-    ("physiotherapy clinic", "Dublin, Ireland"),
-    ("physiotherapy clinic", "Edinburgh, Scotland"),
-    ("physiotherapy clinic", "Auckland, New Zealand"),
-    ("physical therapy", "London, UK"),
-    ("physical therapy", "Dublin, Ireland"),
-    ("physical therapy", "Melbourne, Australia"),
-    ("physical therapy", "Toronto, Canada"),
-    ("occupational therapy", "London, UK"),
-    ("occupational therapy", "Dublin, Ireland"),
-    ("occupational therapy", "Melbourne, Australia"),
-    ("occupational therapy", "Toronto, Canada"),
+    ("med spa", "London, UK"),
+    ("med spa", "Dublin, Ireland"),
+    ("med spa", "Melbourne, Australia"),
+    ("med spa", "Toronto, Canada"),
+    ("med spa", "Sydney, Australia"),
+    ("med spa", "Edinburgh, Scotland"),
+    ("aesthetics clinic", "London, UK"),
+    ("aesthetics clinic", "Dublin, Ireland"),
+    ("aesthetics clinic", "Melbourne, Australia"),
+    ("aesthetics clinic", "Toronto, Canada"),
+    ("aesthetics clinic", "Auckland, New Zealand"),
+    ("aesthetics clinic", "Manchester, UK"),
 ]
 
 
