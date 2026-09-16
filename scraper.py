@@ -44,6 +44,12 @@ TARGET_CATEGORIES = {
     "driving school":       "How are you handling lesson bookings and test reminders for your students right now?",
     "insurance broker":     "How are you currently following up with leads who request a quote but go quiet?",
     "insurance":            "How are you currently following up with leads who request a quote but go quiet?",
+    "med spa":              "How are you currently following up with clients after a treatment to bring them back for their next visit?",
+    "medspa":               "How are you currently following up with clients after a treatment to bring them back for their next visit?",
+    "aesthetics":           "How are you currently following up with clients after a treatment to bring them back for their next visit?",
+    "hvac":                 "When a service request comes in after hours, does someone on your team follow up the next day or does it go unanswered?",
+    "plumbing":             "When a call comes in after hours, does someone on your team follow up the next day or does it go unanswered?",
+    "heating":              "When a service request comes in after hours, does someone on your team follow up the next day or does it go unanswered?",
 }
 
 DEFAULT_QUESTION = "How are you currently handling customer enquiries and follow-ups when your team is tied up?"
