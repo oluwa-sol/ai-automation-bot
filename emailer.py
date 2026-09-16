@@ -84,7 +84,7 @@ Only asking because I work with businesses like {business_name} on exactly this 
 
 Last one from me.
 
-I reached out twice with a question about how {business_name} handles things when the team is tied up. If now is not the right time, completely fine.
+I reached out twice about {business_name} and never heard back. If now is not the right time, completely fine.
 
 Feel free to reply whenever it becomes a priority.
 
