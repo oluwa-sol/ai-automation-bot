@@ -73,13 +73,10 @@ def run(dry: bool):
     if not due and not approved:
         print("[done] nothing approved or due.")
         return
-    # US cold email needs a postal address in the signature. Hold US rows until one is set.
-    if not os.environ.get("POSTAL_ADDRESS", "").strip():
-        held = [r for r in approved if config.is_us(r["City"])]
-        due = [d for d in due if not config.is_us(d[0]["City"])]
-        approved = [r for r in approved if not config.is_us(r["City"])]
-        if held:
-            print(f"[hold] {len(held)} US rows wait until POSTAL_ADDRESS is set")
+    # Owner's decision (2026-11-09): send US rows without a postal address until the
+    # CAC-registered address exists. CAN-SPAM expects one, so set POSTAL_ADDRESS as soon as possible.
+    if not os.environ.get("POSTAL_ADDRESS", "").strip() and any(config.is_us(r["City"]) for r in approved):
+        print("[warn] sending US emails without POSTAL_ADDRESS")
 
     server = None
     if not dry:
