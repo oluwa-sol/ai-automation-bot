@@ -56,8 +56,6 @@ def _days_since(day: str) -> int:
 
 
 def run(dry: bool):
-    if not dry and not os.environ.get("POSTAL_ADDRESS"):
-        raise SystemExit("Set POSTAL_ADDRESS before sending (required for US cold email).")
     ws = open_queue(config.SHEET_NAME, config.QUEUE_TAB)
     today = str(date.today())
     budget = config.MAX_SENDS_PER_DAY
@@ -71,6 +69,11 @@ def run(dry: bool):
         if _days_since(r["Sent"]) >= config.FOLLOWUP_2_AFTER_DAYS:
             due.append((r, "FU2 Sent", "FU2 SENT", FOLLOWUP_2))
     approved = rows_with_status(ws, "APPROVED")
+    if not due and not approved:
+        print("[done] nothing approved or due.")
+        return
+    if not dry and not os.environ.get("POSTAL_ADDRESS"):
+        raise SystemExit("Set POSTAL_ADDRESS before sending (required for US cold email).")
 
     server = None
     if not dry:
