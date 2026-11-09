@@ -105,7 +105,7 @@ def enrich(lead: dict) -> dict:
         for a in s.find_all("a", href=True):
             if a["href"].startswith("mailto:"):
                 e = a["href"][7:].split("?")[0].strip()
-                if is_valid_email(e):
+                if "@" in e and is_valid_email(e):  # some sites ship mailto: links with no address
                     emails.append(e)
     site_domain = urlparse(base).netloc.replace("www.", "")
     # Prefer addresses on the business's own domain, then personal-looking ones.
