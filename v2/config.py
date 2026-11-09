@@ -1,5 +1,6 @@
 """Settings for the v2 pipeline: two niches, a review queue, sending from Zoho."""
 
+import re
 # Two niches only, both backed by a real case study.
 SEARCHES = {
     "real estate": [
@@ -41,10 +42,19 @@ SENDER_EMAIL = "oluwa@automatesit.co"  # separate mailbox so outreach never risk
 SMTP_HOST = "smtp.zoho.com"
 SMTP_PORT = 465
 
-# Signature added by code, never by the model. A postal address keeps US
-# (CAN-SPAM) sends compliant; fill it in before sending to US leads.
+# Signature added by code, never by the model. US cold email (CAN-SPAM) needs a
+# postal address; until POSTAL_ADDRESS is set, US leads are not drafted or sent.
 SIGNATURE = """Damilola Akinbobola
-Automates It | automatesit.co
-{postal_address}
+Automates It | automatesit.co{postal_line}
 
 If this isn't useful, just reply "no thanks" and I won't email again."""
+
+
+def is_us(location: str) -> bool:
+    """US cities are written "City, ST" in SEARCHES; "London, UK" is not US."""
+    m = re.search(r",\s*([A-Z]{2})$", location.strip())
+    return bool(m) and m.group(1) in US_STATES
+
+
+US_STATES = set("""AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT
+NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY DC""".split())

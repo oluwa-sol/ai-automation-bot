@@ -33,7 +33,8 @@ TOPIC = {
 
 
 def _signature() -> str:
-    return config.SIGNATURE.format(postal_address=os.environ.get("POSTAL_ADDRESS", "").strip())
+    address = os.environ.get("POSTAL_ADDRESS", "").strip()
+    return config.SIGNATURE.format(postal_line=f"\n{address}" if address else "")
 
 
 def _send(server, to: str, subject: str, body: str, dry: bool):
@@ -72,8 +73,13 @@ def run(dry: bool):
     if not due and not approved:
         print("[done] nothing approved or due.")
         return
-    if not dry and not os.environ.get("POSTAL_ADDRESS"):
-        raise SystemExit("Set POSTAL_ADDRESS before sending (required for US cold email).")
+    # US cold email needs a postal address in the signature. Hold US rows until one is set.
+    if not os.environ.get("POSTAL_ADDRESS", "").strip():
+        held = [r for r in approved if config.is_us(r["City"])]
+        due = [d for d in due if not config.is_us(d[0]["City"])]
+        approved = [r for r in approved if not config.is_us(r["City"])]
+        if held:
+            print(f"[hold] {len(held)} US rows wait until POSTAL_ADDRESS is set")
 
     server = None
     if not dry:
