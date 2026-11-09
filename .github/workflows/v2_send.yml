@@ -1,0 +1,32 @@
+name: v2 Send Approved
+
+# Sends only rows marked APPROVED in the review queue, plus follow-ups that are due.
+# Runs mid-morning US Eastern so emails land in the working day.
+on:
+  schedule:
+    - cron: "0 14 * * 1-5"   # 15:00 Lagos / 09:00 New York, weekdays
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Preview only, send nothing"
+        type: boolean
+        default: true
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install gspread google-auth
+      - name: Write credentials
+        run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
+      - name: Send
+        env:
+          ZOHO_APP_PASSWORD: ${{ secrets.ZOHO_APP_PASSWORD }}
+          POSTAL_ADDRESS: ${{ secrets.POSTAL_ADDRESS }}
+        run: python -m v2.send ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }}

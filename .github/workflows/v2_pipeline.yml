@@ -1,0 +1,33 @@
+name: v2 Find and Draft Leads
+
+# Researches and drafts leads into the "Maps Leads v2" review queue. Sends nothing.
+on:
+  schedule:
+    - cron: "0 5 * * 1-5"   # 06:00 Lagos, weekdays
+  workflow_dispatch:
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install chromium --with-deps
+      - name: Write credentials
+        run: echo '${{ secrets.GOOGLE_CREDENTIALS }}' > credentials.json
+      - name: Redraft rows you form-tested
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python -m v2.redraft
+      - name: Find, research and draft new leads
+        env:
+          HEADLESS: "1"
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5.4-mini
+        run: python -m v2.pipeline
