@@ -1,6 +1,6 @@
 # Maps leads v2
 
-Quality over volume: two niches (real estate teams, med spas), every email reviewed by a person, sent from dami@automatesit.co.
+Quality over volume: two niches (real estate teams, med spas), every email reviewed by a person, sent from oluwa@automatesit.co.
 
 ## Daily flow
 

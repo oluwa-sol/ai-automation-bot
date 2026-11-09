@@ -37,7 +37,7 @@ QUEUE_TAB = "Review Queue"
 LEGACY_SHEETS = ["AI Automation Leads", "Maps Automation Leads"]
 
 SENDER_NAME = "Damilola Akinbobola"
-SENDER_EMAIL = "dami@automatesit.co"
+SENDER_EMAIL = "oluwa@automatesit.co"  # separate mailbox so outreach never risks the main inbox
 SMTP_HOST = "smtp.zoho.com"
 SMTP_PORT = 465
 
