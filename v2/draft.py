@@ -37,17 +37,21 @@ RULES = """Write the middle of a short cold email (no greeting, no sign-off).
 - Paragraph 1, second sentence: what that usually means for a business like theirs, phrased as
   a common pattern ("usually", "often"), never as a claim about them.
 - Paragraph 2: the proof, in first person, using ONLY the facts given. No other numbers.
-- Paragraph 3: one yes/no question about whether this is on their list this quarter.
-  Never ask for a call, a meeting or "15 minutes".
+- Paragraph 3: one short yes/no question that names the specific outcome for THEIR business,
+  using the business's short name, e.g. "Would replying to every Ascend website enquiry within a
+  minute be useful for your team right now?" Never "is this on your list", "this quarter", or a
+  question built on the word "this". Never ask for a call, a meeting or "15 minutes".
 - No links, no em dashes, no colons inside sentences, no exclamation marks, no AI model or
   tool names, no phrases like "stops being X and becomes Y", "game-changer", "leverage".
-- Subject: 2 to 5 lowercase words about their business or the observed fact. No question mark.
+- Subject: 2 to 5 lowercase words naming THEIR business and what the email is about, e.g.
+  "ascend's website enquiries". Never generic phrases like "contact form follow up". No question mark.
 Return JSON only: {"subject": "...", "body": "..."}"""
 
 BANNED = [r"—", r"–", r"\bI came across\b", r"\bI noticed\b", r"\bhope (this|you)\b",
           r"\b15 minutes\b", r"\bquick call\b", r"\bhop on\b", r"\bgame.?changer\b",
           r"\bleverage\b", r"\bstops? being\b", r"https?://", r"\bChatGPT\b", r"\bClaude\b",
-          r"\bOpenAI\b", r"\bGPT\b", r"!"]
+          r"\bOpenAI\b", r"\bGPT\b", r"!", r"\bon your list\b", r"\bthis quarter\b",
+          r"\bfollow up\b$"]
 
 
 def check(subject: str, body: str) -> list[str]:
