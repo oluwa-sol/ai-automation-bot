@@ -6,7 +6,6 @@ Usage (from the repo root):
 """
 
 import argparse
-import os
 from datetime import date
 
 from scraper import scrape_maps
@@ -27,9 +26,6 @@ def run(niches: list[str], limit: int):
         for category, location in config.SEARCHES[niche]:
             if len(queued) >= limit:
                 break
-            if config.is_us(location) and not os.environ.get("POSTAL_ADDRESS", "").strip():
-                print(f"[hold] {location}: US searches wait until POSTAL_ADDRESS is set")
-                continue
             print(f"\n[*] {niche}: {category} / {location}")
             try:
                 listings = scrape_maps(category, location, config.LISTINGS_PER_SEARCH)
@@ -69,6 +65,8 @@ def run(niches: list[str], limit: int):
                     "Email": lead["site_emails"][0], "Hook (verify on site)": hook,
                     "Why it scored": "; ".join(reasons), "Subject": d["subject"], "Body": body,
                     "Draft issues": "; ".join(d["problems"]), "Date Added": str(date.today()),
+                    # US leads are drafted now but only sent once POSTAL_ADDRESS is set.
+                    "Notes": "US: sends once postal address is added" if config.is_us(location) else "",
                 })
                 print(f"  [+] queued ({points}): {lead['name']}")
 
