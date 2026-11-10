@@ -104,8 +104,32 @@ def greeting(lead: dict) -> str:
     """Greet whoever owns the inbox. A named contact on the site only counts if the
     email is a shared inbox; josh@ gets "Hi Josh," even if the site names Cheryl."""
     email = (lead.get("site_emails") or [""])[0]
-    local = re.split(r"[._\-+]", email.split("@")[0])[0]
-    if local.isalpha() and 2 < len(local) < 12 and not _is_generic(email):
-        return f"Hi {local.capitalize()},"
+    raw_local = email.split("@")[0].lower()
+    local = re.split(r"[._\-+]", raw_local)[0]
     first = (lead.get("contact_name") or "").split(" ")[0]
-    return f"Hi {first}," if first else "Hi there,"
+    if first and local == first.lower():
+        return f"Hi {first},"
+    if _looks_like_first_name(local, dotted="." in raw_local or "_" in raw_local) and not _is_generic(email):
+        return f"Hi {local.capitalize()},"
+    if first and _is_generic(email):
+        return f"Hi {first},"
+    return "Hi there,"
+
+
+# Two-consonant starts that real first names use. "jholt" (initial + surname)
+# or "drmarkwoo" don't start this way, so they get "Hi there," instead.
+_NAME_ONSETS = ("bl", "br", "ch", "cl", "cr", "dr", "fl", "fr", "gl", "gr", "kr",
+                "ph", "pr", "sh", "st", "th", "tr", "wr")
+
+
+def _looks_like_first_name(local: str, dotted: bool) -> bool:
+    if not local.isalpha() or not 3 <= len(local) <= 8:
+        return False
+    if dotted:  # mark.buckley, james.prendergast: the first part is the name
+        return True
+    if local.startswith("dr") and len(local) > 5:  # drmarkwoo
+        return False
+    vowels = "aeiouy"
+    if local[0] not in vowels and local[1] not in vowels and local[:2] not in _NAME_ONSETS:
+        return False
+    return len(local) <= 7
