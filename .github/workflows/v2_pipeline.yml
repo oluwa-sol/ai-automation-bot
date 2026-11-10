@@ -1,9 +1,10 @@
 name: v2 Find and Draft Leads
 
 # Researches and drafts leads into the "Maps Leads v2" review queue. Sends nothing.
+# Started at 06:00 Lagos on weekdays by a Windows scheduled task on the owner's
+# laptop ("Maps Leads v2 - 6am trigger"), because GitHub's cron skipped or
+# delayed runs by hours. Can also be started by hand from the Actions tab.
 on:
-  schedule:
-    - cron: "0 5 * * 1-5"   # 06:00 Lagos, weekdays
   workflow_dispatch:
 
 jobs:
