@@ -6,6 +6,7 @@ Needs env: ZOHO_APP_PASSWORD, POSTAL_ADDRESS.
 Usage:
     python -m v2.send            # send for real
     python -m v2.send --dry-run  # print what would go out
+    python -m v2.send --followups-only  # used by the 15:00 task
 """
 
 import argparse
@@ -56,7 +57,7 @@ def _days_since(day: str) -> int:
         return -1
 
 
-def run(dry: bool):
+def run(dry: bool, followups_only: bool = False):
     ws = open_queue(config.SHEET_NAME, config.QUEUE_TAB)
     today = str(date.today())
     budget = config.MAX_SENDS_PER_DAY
@@ -69,7 +70,8 @@ def run(dry: bool):
     for r in rows_with_status(ws, "FU1 SENT"):
         if _days_since(r["Sent"]) >= config.FOLLOWUP_2_AFTER_DAYS:
             due.append((r, "FU2 Sent", "FU2 SENT", FOLLOWUP_2))
-    approved = rows_with_status(ws, "APPROVED")
+    # First emails only go out when the owner asks; the 15:00 task sends follow-ups only.
+    approved = [] if followups_only else rows_with_status(ws, "APPROVED")
     if not due and not approved:
         print("[done] nothing approved or due.")
         return
@@ -113,4 +115,7 @@ def run(dry: bool):
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--dry-run", action="store_true")
-    run(p.parse_args().dry_run)
+    p.add_argument("--followups-only", action="store_true",
+                   help="send due follow-ups but leave APPROVED first emails alone")
+    a = p.parse_args()
+    run(a.dry_run, a.followups_only)
