@@ -8,15 +8,12 @@ SEARCHES = {
         ("real estate team", "Dallas, TX"),
         ("real estate team", "Austin, TX"),
         ("real estate team", "Tampa, FL"),
-        ("estate agents", "Manchester, UK"),
         ("real estate agency", "Brisbane, Australia"),
     ],
     "med spa": [
         ("med spa", "Scottsdale, AZ"),
         ("med spa", "Dallas, TX"),
         ("med spa", "Miami, FL"),
-        ("aesthetics clinic", "London, UK"),
-        ("aesthetics clinic", "Manchester, UK"),
         ("cosmetic clinic", "Sydney, Australia"),
     ],
 }
