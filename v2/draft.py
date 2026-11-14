@@ -93,11 +93,18 @@ def draft(lead: dict, niche: str, hook: str) -> dict:
             data = json.loads(resp.choices[0].message.content or "{}")
         except json.JSONDecodeError:
             continue
-        subject, body = data.get("subject", "").strip(), data.get("body", "").strip()
+        subject, body = _clean(data.get("subject", "")), _clean(data.get("body", ""))
         out = {"subject": subject, "body": body, "problems": check(subject, body)}
         if not out["problems"]:
             break
     return out
+
+
+def _clean(text: str) -> str:
+    """Repair accents that arrive as a NUL byte plus hex ("L\\x00e9 Nour" -> "Lé Nour")
+    and drop any other control characters."""
+    text = re.sub(r"\x00([0-9a-fA-F]{2})", lambda m: chr(int(m.group(1), 16)), text)
+    return re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", text).strip()
 
 
 def greeting(lead: dict) -> str:
@@ -107,6 +114,8 @@ def greeting(lead: dict) -> str:
     raw_local = email.split("@")[0].lower()
     local = re.split(r"[._\-+]", raw_local)[0]
     first = (lead.get("contact_name") or "").split(" ")[0]
+    if len(first) < 3 or not first.isalpha():  # "As Co (Founder" scraped as a name
+        first = ""
     if first and local == first.lower():
         return f"Hi {first},"
     if _looks_like_first_name(local, dotted="." in raw_local or "_" in raw_local) and not _is_generic(email):
