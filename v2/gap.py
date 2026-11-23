@@ -9,16 +9,14 @@ FEATURES = [
     ("chat",
      lambda l: bool(l.get("chat_tools")),
      "lets visitors start a chat or WhatsApp conversation straight from the website",
-     "visitors fill in a form and wait for a reply"),
+     "I could only find a contact form, no chat"),
     ("booking",
      lambda l: bool(l.get("booking_tools")),
      "lets people book a time online, any hour of the day",
-     "people have to wait for someone to get back to them to book"),
-    ("instant_followup",
-     lambda l: bool(l.get("crm")),
-     "sends every website enquiry straight into an instant follow-up system",
-     "enquiries land in an inbox until someone picks them up"),
+     "I couldn't find a way to book online"),
 ]
+# Only features we can SEE on both sites. "Instant follow-up" was dropped: we can't
+# verify from outside how a business handles its inbox.
 
 
 def short_name(name: str) -> str:
@@ -37,7 +35,7 @@ def find_gap(lead: dict, competitors: list[dict]) -> dict | None:
               if c.get("site_ok") and short_name(c["name"]).lower() != short_name(lead["name"]).lower()]
     best = None
     for key, has, they_do, lead_does in FEATURES:
-        if has(lead):
+        if has(lead) or lead.get("chat_tools") and key == "chat":
             continue
         with_it = [c for c in others if has(c)]
         if not with_it:
@@ -54,4 +52,4 @@ def find_gap(lead: dict, competitors: list[dict]) -> dict | None:
 def hook_text(gap: dict, lead_name: str) -> str:
     """One line for the review queue, so the reviewer can verify both sites."""
     return (f"gap: {gap['competitor']} {gap['they_do']} ({gap['competitor_site']}); "
-            f"on {short_name(lead_name)}'s site {gap['lead_does']}")
+            f"on {short_name(lead_name)}'s site: {gap['lead_does']}")

@@ -6,6 +6,11 @@ name: v2 Find and Draft Leads
 # delayed runs by hours. Can also be started by hand from the Actions tab.
 on:
   workflow_dispatch:
+    inputs:
+      redo_drafts_only:
+        description: "Only redraft queued REVIEW leads (no new leads)"
+        type: boolean
+        default: false
 
 jobs:
   draft:
@@ -31,8 +36,9 @@ jobs:
           HEADLESS: "1"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5.4-mini
-        run: python -m v2.pipeline --regap
+        run: python -m v2.pipeline --regap ${{ inputs.redo_drafts_only && '--redo' || '' }}
       - name: Find, research and draft new leads
+        if: ${{ !inputs.redo_drafts_only }}
         env:
           HEADLESS: "1"
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

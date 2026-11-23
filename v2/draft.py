@@ -67,7 +67,7 @@ BANNED = [r"—", r"–", r"\bI came across\b", r"\bI noticed\b", r"\bhope (this
           r"\b15 minutes\b", r"\bquick call\b", r"\bhop on\b", r"\bgame.?changer\b",
           r"\bleverage\b", r"\bstops? being\b", r"https?://", r"\bChatGPT\b", r"\bClaude\b",
           r"\bOpenAI\b", r"\bGPT\b", r"!", r"\bon your list\b", r"\bthis quarter\b",
-          r"\bfollow up\b$"]
+          r"\bfollow up\b$", r"\bgap\b"]
 
 
 def check(subject: str, body: str) -> list[str]:
@@ -84,20 +84,23 @@ def check(subject: str, body: str) -> list[str]:
 
 
 GAP_RULES = """Write the middle of a short cold email (no greeting, no sign-off).
-- 60 to 100 words, 3 short paragraphs.
+- 55 to 90 words, 3 short paragraphs.
 - Paragraph 1 sells a competitor gap. Say you were comparing {niche_plural} in {city}, then that
-  the named competitor does the thing (use the wording given), then what happens on THEIR site
-  instead (use the wording given). Use each business's short everyday name. State facts only,
+  the named competitor does the thing (use the wording given), then what you found on THEIR site
+  (use the wording given). Use short everyday names for both businesses (drop city names,
+  brokerage names and anything after "|" or "-"). State facts only,
   never claim they are losing customers or that the competitor is better overall.
 - Paragraph 2: one sentence on why that matters, as a common pattern ("usually", "often"),
-  then the proof in first person, using ONLY the facts given. No other numbers.
+  then ONE sentence of proof in first person with its single headline result, using ONLY the
+  facts given. No other numbers.
 - Paragraph 3: one short yes/no question naming the outcome for THEIR business, e.g.
   "Would letting Ascend's website visitors book a viewing any time be useful right now?"
   Never ask for a call, a meeting or "15 minutes".
 - No links, no em dashes, no colons inside sentences, no exclamation marks, no AI model or
   tool names, no "game-changer", "leverage", "stops being X".
-- Subject: 3 to 6 lowercase words, built on the gap, e.g. "something hill realty does online".
-  No question mark.
+- Subject: 3 to 6 lowercase words naming the competitor and what they do, e.g.
+  "something hill realty does online" or "how templeton handles new buyers". Never the word
+  "gap". No question mark.
 Return JSON only: {{"subject": "...", "body": "..."}}"""
 
 NICHE_PLURAL = {"real estate": "real estate teams", "med spa": "med spas",

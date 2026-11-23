@@ -124,11 +124,12 @@ def process(lead: dict, niche: str, location: str, seen_emails: set, researched:
     }
 
 
-def regap():
-    """Redraft leads still waiting in REVIEW around a competitor gap from their own search."""
+def regap(redo: bool = False):
+    """Redraft leads still waiting in REVIEW around a competitor gap from their own search.
+    redo=True also redrafts rows that already have a gap hook (after rule changes)."""
     from v2.queue import rows_with_status, update
     ws = open_queue(config.SHEET_NAME, config.QUEUE_TAB)
-    rows = [r for r in rows_with_status(ws, "REVIEW") if not r["Hook (verify on site)"].startswith("gap:")]
+    rows = [r for r in rows_with_status(ws, "REVIEW") if redo or not r["Hook (verify on site)"].startswith("gap:")]
     all_searches = {**config.SEARCHES, **config.PAUSED_SEARCHES}
     for r in rows:
         search = next((s for s in all_searches.get(r["Niche"], []) if s[1] == r["City"]), None)
@@ -156,9 +157,10 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--niche", choices=list(config.SEARCHES), help="one niche only")
     p.add_argument("--regap", action="store_true", help="redraft REVIEW rows around a competitor gap")
+    p.add_argument("--redo", action="store_true", help="with --regap: redo rows that already have a gap")
     p.add_argument("--limit", type=int, default=config.MAX_QUEUED_PER_RUN)
     a = p.parse_args()
     if a.regap:
-        regap()
+        regap(a.redo)
     else:
         run([a.niche] if a.niche else list(config.SEARCHES), a.limit)

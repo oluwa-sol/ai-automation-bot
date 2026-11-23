@@ -4,7 +4,7 @@ Every signal here is something a person can confirm by opening the site.
 """
 
 import re
-from urllib.parse import urljoin, urlparse
+from urllib.parse import unquote, urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -104,7 +104,7 @@ def enrich(lead: dict) -> dict:
     for s in soups:
         for a in s.find_all("a", href=True):
             if a["href"].startswith("mailto:"):
-                e = a["href"][7:].split("?")[0].strip()
+                e = unquote(a["href"][7:].split("?")[0]).strip()
                 if "@" in e and is_valid_email(e):  # some sites ship mailto: links with no address
                     emails.append(e)
     site_domain = urlparse(base).netloc.replace("www.", "")
@@ -133,4 +133,5 @@ def _is_generic(email: str) -> bool:
     return email.split("@")[0].lower() in {
         "info", "contact", "hello", "office", "admin", "enquiries", "inquiries",
         "bookings", "booking", "reception", "team", "sales", "support", "frontdesk",
-        "concierge", "appointments", "care", "spa", "clinic", "marketing"}
+        "concierge", "appointments", "care", "spa", "clinic", "marketing", "rent", "rentals",
+        "lettings", "sales", "leasing", "property", "realestate", "homes", "listings", "jobs"}
