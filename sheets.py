@@ -34,9 +34,18 @@ def get_or_create_sheet(sheet_name: str, credentials_file: str = "credentials.js
                 raise
 
 
-def get_existing_names(sheet) -> set:
-    all_values = sheet.col_values(1)
-    return {name.strip().lower() for name in all_values[1:] if name.strip()}
+def get_existing_names(sheet, retries: int = 5) -> set:
+    for attempt in range(retries):
+        try:
+            all_values = sheet.col_values(1)
+            return {name.strip().lower() for name in all_values[1:] if name.strip()}
+        except gspread.exceptions.APIError as e:
+            if attempt < retries - 1:
+                wait = 10 * (attempt + 1)
+                print(f"  [sheets] API error ({e}), retrying in {wait}s...")
+                time.sleep(wait)
+            else:
+                raise
 
 
 def append_lead(sheet, lead: dict, existing: set) -> bool:

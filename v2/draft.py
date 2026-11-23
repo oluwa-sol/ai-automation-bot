@@ -98,9 +98,9 @@ GAP_RULES = """Write the middle of a short cold email (no greeting, no sign-off)
   Never ask for a call, a meeting or "15 minutes".
 - No links, no em dashes, no colons inside sentences, no exclamation marks, no AI model or
   tool names, no "game-changer", "leverage", "stops being X".
-- Subject: 3 to 6 lowercase words naming the competitor and what they do, e.g.
-  "something hill realty does online" or "how templeton handles new buyers". Never the word
-  "gap". No question mark.
+- Subject: 3 to 6 lowercase words starting with "how", naming the competitor and what they do,
+  e.g. "how metrocity handles online booking" or "how templeton answers website visitors".
+  Never the word "gap". No question mark.
 Return JSON only: {{"subject": "...", "body": "..."}}"""
 
 NICHE_PLURAL = {"real estate": "real estate teams", "med spa": "med spas",
