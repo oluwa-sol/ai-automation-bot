@@ -14,6 +14,7 @@ from scraper import scrape_maps
 from v2 import config
 from v2.draft import draft, greeting
 from v2.enrich import enrich
+from v2.gap import find_gap, hook_text
 from v2.qualify import score
 from v2.queue import COL, append_rows, known_businesses, open_queue
 
@@ -35,6 +36,8 @@ def run(niches: list[str], limit: int):
                 print(f"  [!] scrape failed: {e}")
                 continue
 
+            # Research every listing once, so each lead can be compared with its competitors.
+            researched = research_all(listings) if config.USE_COMPETITOR_GAPS else {}
             for lead in listings:
                 if queued >= limit:
                     break
@@ -43,7 +46,7 @@ def run(niches: list[str], limit: int):
                     continue
                 seen.add(lead["name"].strip().lower())
                 try:
-                    row = process(lead, niche, location, seen_emails)
+                    row = process(lead, niche, location, seen_emails, researched)
                 except Exception as e:  # one bad website must not cost the whole batch
                     print(f"  [!] {lead['name']}: {type(e).__name__}: {e}")
                     continue
@@ -69,9 +72,21 @@ def web_email(lead: dict) -> str:
     return email if email and email.lower().endswith("@" + domain) else ""
 
 
-def process(lead: dict, niche: str, location: str, seen_emails: set) -> dict | None:
+def research_all(listings: list[dict]) -> dict:
+    """Enrich every listing in a search. Returns {name: enriched lead}."""
+    out = {}
+    for l in listings:
+        try:
+            out[l["name"]] = enrich(l)
+        except Exception as e:
+            print(f"  [!] research failed for {l['name']}: {e}")
+    return out
+
+
+def process(lead: dict, niche: str, location: str, seen_emails: set, researched: dict | None = None) -> dict | None:
     """Research, score and draft one lead. Returns a queue row, or None to skip it."""
-    lead = enrich(lead)
+    researched = researched or {}
+    lead = researched.get(lead["name"]) or enrich(lead)
     if not lead["site_emails"]:
         found = web_email(lead)
         if not found:
@@ -86,11 +101,16 @@ def process(lead: dict, niche: str, location: str, seen_emails: set) -> dict | N
     seen_emails.add(lead["site_emails"][0].lower())
 
     points, hook, reasons = score(lead, niche)
+    gap = find_gap(lead, list(researched.values())) if researched else None
+    if gap:  # a verified competitor gap is the strongest hook we have
+        hook = hook_text(gap, lead["name"])
+        points += 3
+        reasons.append(f"{gap['competitor_count']} nearby competitor(s) have it, they don't")
     if not hook or points < config.MIN_SCORE_TO_QUEUE:
         print(f"  [skip] score {points}, hook '{hook}': {lead['name']}")
         return None
 
-    d = draft(lead, niche, hook)
+    d = draft(lead, niche, hook, gap)
     return {
         "Status": "REVIEW", "Score": points, "Niche": niche,
         "Business": lead["name"], "City": location, "Website": lead["website"],
@@ -104,9 +124,41 @@ def process(lead: dict, niche: str, location: str, seen_emails: set) -> dict | N
     }
 
 
+def regap():
+    """Redraft leads still waiting in REVIEW around a competitor gap from their own search."""
+    from v2.queue import rows_with_status, update
+    ws = open_queue(config.SHEET_NAME, config.QUEUE_TAB)
+    rows = [r for r in rows_with_status(ws, "REVIEW") if not r["Hook (verify on site)"].startswith("gap:")]
+    all_searches = {**config.SEARCHES, **config.PAUSED_SEARCHES}
+    for r in rows:
+        search = next((s for s in all_searches.get(r["Niche"], []) if s[1] == r["City"]), None)
+        if not search:
+            print(f"  [regap] no search for {r['Niche']} / {r['City']}: {r['Business']}")
+            continue
+        listings = scrape_maps(search[0], search[1], config.LISTINGS_PER_SEARCH)
+        researched = research_all(listings)
+        lead = researched.get(r["Business"]) or enrich({"name": r["Business"], "website": r["Website"],
+                                                        "location": r["City"], "reviews": r["Reviews"]})
+        lead.setdefault("location", r["City"])
+        gap = find_gap(lead, list(researched.values()))
+        if not gap:
+            update(ws, r["_row"], **{"Draft issues": "regap: no competitor gap found, kept old draft"})
+            print(f"  [regap] no gap: {r['Business']}")
+            continue
+        d = draft(lead, r["Niche"], "", gap)
+        greet = r["Body"].split(chr(10), 1)[0] if r["Body"] else "Hi there,"
+        update(ws, r["_row"], Subject=d["subject"] or r["Subject"], Body=greet + chr(10) * 2 + d["body"],
+               **{"Hook (verify on site)": hook_text(gap, r["Business"]), "Draft issues": "; ".join(d["problems"])})
+        print(f"  [regap] {r['Business']}: vs {gap['competitor']} ({gap['feature']})")
+
+
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--niche", choices=list(config.SEARCHES), help="one niche only")
+    p.add_argument("--regap", action="store_true", help="redraft REVIEW rows around a competitor gap")
     p.add_argument("--limit", type=int, default=config.MAX_QUEUED_PER_RUN)
     a = p.parse_args()
-    run([a.niche] if a.niche else list(config.SEARCHES), a.limit)
+    if a.regap:
+        regap()
+    else:
+        run([a.niche] if a.niche else list(config.SEARCHES), a.limit)

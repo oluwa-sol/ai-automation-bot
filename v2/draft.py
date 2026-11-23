@@ -20,6 +20,22 @@ PROOF = {
         "agent. First response went from 1 to 5 hours to under 90 seconds, and cold leads "
         "get followed up automatically every 30 days."
     ),
+    # New niches reuse verified results from other industries, stated as such.
+    "home services": (
+        "I built a lead system for a real estate team that answers every enquiry from their "
+        "website and social channels, qualifies it and books the call. First response went from "
+        "1 to 5 hours to under 90 seconds, and cold enquiries get followed up automatically."
+    ),
+    "law firm": (
+        "I built an intake system for a professional services business that replies to every new "
+        "enquiry within 60 seconds (it used to take 19 hours), collects the details and prepares a "
+        "brief before the first call. It saves them 17.5 hours of admin a week."
+    ),
+    "mortgage broker": (
+        "I built a lead system for a real estate team that answers every enquiry from their "
+        "website and social channels, qualifies it and books the call. First response went from "
+        "1 to 5 hours to under 90 seconds, and cold enquiries get followed up automatically."
+    ),
     "med spa": (
         "I built an intake system for a client that replies to every new enquiry with a "
         "personalised message within 60 seconds (it used to take 19 hours) and prepares the "
@@ -67,6 +83,41 @@ def check(subject: str, body: str) -> list[str]:
     return problems
 
 
+GAP_RULES = """Write the middle of a short cold email (no greeting, no sign-off).
+- 60 to 100 words, 3 short paragraphs.
+- Paragraph 1 sells a competitor gap. Say you were comparing {niche_plural} in {city}, then that
+  the named competitor does the thing (use the wording given), then what happens on THEIR site
+  instead (use the wording given). Use each business's short everyday name. State facts only,
+  never claim they are losing customers or that the competitor is better overall.
+- Paragraph 2: one sentence on why that matters, as a common pattern ("usually", "often"),
+  then the proof in first person, using ONLY the facts given. No other numbers.
+- Paragraph 3: one short yes/no question naming the outcome for THEIR business, e.g.
+  "Would letting Ascend's website visitors book a viewing any time be useful right now?"
+  Never ask for a call, a meeting or "15 minutes".
+- No links, no em dashes, no colons inside sentences, no exclamation marks, no AI model or
+  tool names, no "game-changer", "leverage", "stops being X".
+- Subject: 3 to 6 lowercase words, built on the gap, e.g. "something hill realty does online".
+  No question mark.
+Return JSON only: {{"subject": "...", "body": "..."}}"""
+
+NICHE_PLURAL = {"real estate": "real estate teams", "med spa": "med spas",
+                "home services": "home service companies", "law firm": "law firms",
+                "mortgage broker": "mortgage brokers"}
+
+
+def _gap_prompt(lead: dict, niche: str, gap: dict) -> str:
+    facts = {
+        "business": lead["name"], "city": lead["location"],
+        "competitor": gap["competitor"], "competitor_does": gap["they_do"],
+        "their_site_instead": gap["lead_does"],
+        "how_many_nearby_competitors_do_it": gap["competitor_count"],
+        "proof_you_may_use": PROOF[niche],
+    }
+    rules = GAP_RULES.format(niche_plural=NICHE_PLURAL.get(niche, niche + "s"),
+                             city=lead["location"].split(",")[0])
+    return rules + "\n\nFacts (use only these):\n" + json.dumps(facts, indent=1)
+
+
 def _prompt(lead: dict, niche: str, hook: str) -> str:
     facts = {
         "business": lead["name"], "city": lead["location"], "niche": niche,
@@ -78,15 +129,16 @@ def _prompt(lead: dict, niche: str, hook: str) -> str:
     return RULES + "\n\nFacts (use only these):\n" + json.dumps(facts, indent=1)
 
 
-def draft(lead: dict, niche: str, hook: str) -> dict:
-    """Return {subject, body, problems}. problems is empty when the draft passes."""
+def draft(lead: dict, niche: str, hook: str, gap: dict | None = None) -> dict:
+    """Return {subject, body, problems}. problems is empty when the draft passes.
+    With a competitor gap, the email is built around it."""
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
     model = os.environ.get("OPENAI_MODEL", "gpt-5.4-mini")
     out = {"subject": "", "body": "", "problems": ["not drafted"]}
     for _ in range(2):  # one retry if the first draft breaks a rule
         resp = client.chat.completions.create(
             model=model,
-            messages=[{"role": "user", "content": _prompt(lead, niche, hook)}],
+            messages=[{"role": "user", "content": _gap_prompt(lead, niche, gap) if gap else _prompt(lead, niche, hook)}],
             response_format={"type": "json_object"},
         )
         try:

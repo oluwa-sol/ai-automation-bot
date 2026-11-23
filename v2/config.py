@@ -10,6 +10,26 @@ SEARCHES = {
         ("real estate team", "Tampa, FL"),
         ("real estate agency", "Brisbane, Australia"),
     ],
+    # Businesses that live on fast replies to enquiries. No clinics or med spas while the
+    # Komtora contract (clinic niche, non-solicit) is running.
+    "home services": [
+        ("roofing contractor", "Phoenix, AZ"),
+        ("hvac company", "Dallas, TX"),
+        ("plumbing company", "Tampa, FL"),
+        ("roofing company", "Brisbane, Australia"),
+    ],
+    "law firm": [
+        ("personal injury law firm", "Houston, TX"),
+        ("immigration law firm", "Miami, FL"),
+    ],
+    "mortgage broker": [
+        ("mortgage broker", "Austin, TX"),
+        ("mortgage broker", "Brisbane, Australia"),
+    ],
+}
+
+# Paused for new leads. Kept so leads already in the queue can still be redrafted.
+PAUSED_SEARCHES = {
     "med spa": [
         ("med spa", "Scottsdale, AZ"),
         ("med spa", "Dallas, TX"),
@@ -17,6 +37,10 @@ SEARCHES = {
         ("cosmetic clinic", "Sydney, Australia"),
     ],
 }
+
+# Competitor gaps: research every listing in a search so each lead can be compared
+# with the other businesses in the same city and niche.
+USE_COMPETITOR_GAPS = True
 
 # How many listings to open per search, and how many leads to queue per run.
 # Small on purpose: every lead gets reviewed by a person.
