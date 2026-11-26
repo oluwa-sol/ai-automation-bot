@@ -116,6 +116,7 @@ def process(lead: dict, niche: str, location: str, seen_emails: set, researched:
             "Notes": "email from web search, check it before sending" if lead.get("email_source") else "",
             "Why it scored": "; ".join(reasons), "Subject": a["subject"], "Body": a["body"],
             "Draft issues": "", "Date Added": str(date.today()),
+            "FU1 Text": a["fu1"], "FU2 Text": a["fu2"],
         }
 
     points, hook, reasons = score(lead, niche)

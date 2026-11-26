@@ -44,6 +44,26 @@ TEMPLATES = {
     },
 }
 
+# Follow-ups are sent by hand as replies in the same thread (day 4 and day 9).
+FU1_LINE = {
+    "UK": "If January's document chasing at {name} is already sorted, no problem at all.",
+    "US": "If tax season document chasing at {name} is already sorted, no problem at all.",
+    "AU": "If document chasing at {name} is already sorted for next tax time, no problem at all.",
+}
+
+
+def followups(greet: str, name: str, ctry: str) -> tuple[str, str]:
+    fu1 = "\n\n".join([greet,
+        "Quick one in case this got buried. " + FU1_LINE[ctry].format(name=name)
+        + " If not, the demo above shows how it works in about a minute.",
+        "Damilola"])
+    fu2 = "\n\n".join([greet,
+        "Last note from me on this. If chasing client documents ever becomes a headache before "
+        f"the deadline, just reply to this email and I'll set up a version for {name} to try.",
+        "Damilola"])
+    return fu1, fu2
+
+
 MIDDLE = ("I built a small system that sends each client their own checklist, reminds them only "
           "about what's still missing, and shows you who's done in one tracker. You approve every "
           "message before it goes out.\n\n"
@@ -96,5 +116,6 @@ def build(lead: dict, location: str, greet: str) -> dict:
     name = re.sub(r"[\s,]+(ltd|limited|llp|plc|inc|llc|pllc|pty|pty ltd|p\.?c\.?)\.?$", "", short_name(lead["name"]), flags=re.I).strip()
     t = TEMPLATES[ctry]
     body = "\n\n".join([greet, t["opener"].format(name=name), MIDDLE, t["ask"], signature(ctry)])
-    return {"subject": t["subject"].format(name=name), "body": body, "email": email,
+    fu1, fu2 = followups(greet, name, ctry)
+    return {"subject": t["subject"].format(name=name), "body": body, "email": email, "fu1": fu1, "fu2": fu2,
             "evidence": f"{ctry}: site mentions \"{m.group(0)}\"", "skip": ""}

@@ -15,7 +15,8 @@ SCOPES = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/a
 
 COLUMNS = ["Status", "Score", "Niche", "Business", "City", "Website", "Reviews",
            "Contact", "Email", "Hook (verify on site)", "Why it scored", "Subject", "Body",
-           "Draft issues", "Date Added", "Sent", "FU1 Sent", "FU2 Sent", "Notes"]
+           "Draft issues", "Date Added", "Sent", "FU1 Sent", "FU2 Sent", "Notes",
+           "FU1 Text", "FU2 Text"]
 COL = {name: i + 1 for i, name in enumerate(COLUMNS)}
 
 
