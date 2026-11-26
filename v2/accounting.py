@@ -65,7 +65,7 @@ def followups(greet: str, name: str, ctry: str) -> tuple[str, str]:
 
 
 MIDDLE = ("I built a small system that sends each client their own checklist, reminds them only "
-          "about what's still missing, and shows you who's done in one tracker. You approve every "
+          "about what's still missing, and shows you who is done in one tracker. You approve every "
           "message before it goes out.\n\n"
           "Here's a 1-minute demo of it working\n" + DEMO_URL)
 
@@ -78,7 +78,7 @@ def country(location: str) -> str:
     return "UK"
 
 
-OPT_OUT = 'If this isn\'t useful, just reply "no thanks" and I won\'t email again.'
+OPT_OUT = 'If this is not useful, just reply "no thanks" and I won\'t email again.'
 
 
 def signature(ctry: str) -> str:
