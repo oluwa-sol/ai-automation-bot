@@ -3,6 +3,24 @@
 import re
 # Two niches only, both backed by a real case study.
 SEARCHES = {
+    # Admin Autopilot / Document Chaser (Nov 2026). Countries interleaved so each
+    # morning's 15 drafts cover the UK, US and Australia. Fixed templates, see accounting.py.
+    "accounting": [
+        ("accountants", "Manchester, UK"),
+        ("cpa firm", "Austin, TX"),
+        ("accountants", "Brisbane, Australia"),
+        ("accountants", "Leeds, UK"),
+        ("tax preparation", "Phoenix, AZ"),
+        ("tax accountant", "Perth, Australia"),
+        ("accountants", "Birmingham, UK"),
+        ("cpa firm", "Tampa, FL"),
+        ("accountants", "Adelaide, Australia"),
+        ("accountants", "Bristol, UK"),
+    ],
+}
+
+# Paused for new leads (Nov 2026: accounting only). Kept so queued leads can still be redrafted.
+PAUSED_SEARCHES = {
     "real estate": [
         ("real estate team", "Phoenix, AZ"),
         ("real estate team", "Dallas, TX"),
@@ -22,22 +40,10 @@ SEARCHES = {
         ("personal injury law firm", "Houston, TX"),
         ("immigration law firm", "Miami, FL"),
     ],
-    # Admin Autopilot niche (Nov 2026): document chasing before tax deadlines.
-    "accounting": [
-        ("accounting firm", "Austin, TX"),
-        ("cpa firm", "Tampa, FL"),
-        ("tax preparation", "Phoenix, AZ"),
-        ("accountants", "Manchester, UK"),
-        ("bookkeeping firm", "Brisbane, Australia"),
-    ],
     "mortgage broker": [
         ("mortgage broker", "Austin, TX"),
         ("mortgage broker", "Brisbane, Australia"),
     ],
-}
-
-# Paused for new leads. Kept so leads already in the queue can still be redrafted.
-PAUSED_SEARCHES = {
     "med spa": [
         ("med spa", "Scottsdale, AZ"),
         ("med spa", "Dallas, TX"),
@@ -48,7 +54,7 @@ PAUSED_SEARCHES = {
 
 # Competitor gaps: research every listing in a search so each lead can be compared
 # with the other businesses in the same city and niche.
-USE_COMPETITOR_GAPS = True
+USE_COMPETITOR_GAPS = False  # accounting uses fixed templates
 
 # How many listings to open per search, and how many leads to queue per run.
 # Small on purpose: every lead gets reviewed by a person.

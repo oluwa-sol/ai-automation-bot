@@ -85,7 +85,7 @@ def _find(mapping: dict, html: str) -> list[str]:
 def enrich(lead: dict) -> dict:
     """Return the lead with website evidence added. Never raises."""
     base = lead.get("website", "")
-    out = {**lead, "booking_tools": [], "chat_tools": [], "portal_tools": [], "crm": [], "slow_reply_text": "",
+    out = {**lead, "booking_tools": [], "chat_tools": [], "portal_tools": [], "crm": [], "slow_reply_text": "", "site_text": "",
            "call_to_book": False, "contact_name": "", "contact_title": "",
            "site_emails": [], "has_form": False, "site_ok": False}
     home = _get(base) if base else None
@@ -102,6 +102,7 @@ def enrich(lead: dict) -> dict:
     out["portal_tools"] = _find(PORTAL_TOOLS, html)
     out["crm"] = _find(REAL_ESTATE_CRMS, html)
     out["has_form"] = any(s.find("form") for s in soups)
+    out["site_text"] = re.sub(r"\s+", " ", text)[:40000]
     out["call_to_book"] = bool(CALL_TO_BOOK_RE.search(text))
     m = SLOW_REPLY_RE.search(text)
     out["slow_reply_text"] = m.group(0) if m else ""

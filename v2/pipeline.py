@@ -15,6 +15,7 @@ from v2 import config
 from v2.draft import draft, greeting
 from v2.enrich import enrich
 from v2.gap import find_gap, hook_text
+from v2 import accounting
 from v2.qualify import score
 from v2.queue import COL, append_rows, known_businesses, open_queue
 
@@ -100,6 +101,23 @@ def process(lead: dict, niche: str, location: str, seen_emails: set, researched:
         return None
     seen_emails.add(lead["site_emails"][0].lower())
 
+    if niche == "accounting":
+        points, _, reasons = score(lead, niche)
+        a = accounting.build(lead, location, greeting(lead))
+        if a["skip"]:
+            print(f"  [skip] {a['skip']}: {lead['name']}")
+            return None
+        return {
+            "Status": "REVIEW", "Score": points, "Niche": niche,
+            "Business": lead["name"], "City": location, "Website": lead["website"],
+            "Reviews": lead.get("reviews", ""),
+            "Contact": f"{lead['contact_name']} ({lead['contact_title']})".strip(" ()"),
+            "Email": a["email"], "Hook (verify on site)": a["evidence"],
+            "Notes": "email from web search, check it before sending" if lead.get("email_source") else "",
+            "Why it scored": "; ".join(reasons), "Subject": a["subject"], "Body": a["body"],
+            "Draft issues": "", "Date Added": str(date.today()),
+        }
+
     points, hook, reasons = score(lead, niche)
     gap = find_gap(lead, list(researched.values()), niche) if researched else None
     if gap:  # a verified competitor gap is the strongest hook we have
@@ -129,7 +147,8 @@ def regap(redo: bool = False):
     redo=True also redrafts rows that already have a gap hook (after rule changes)."""
     from v2.queue import rows_with_status, update
     ws = open_queue(config.SHEET_NAME, config.QUEUE_TAB)
-    rows = [r for r in rows_with_status(ws, "REVIEW") if redo or not r["Hook (verify on site)"].startswith("gap:")]
+    rows = [r for r in rows_with_status(ws, "REVIEW") if r["Niche"] != "accounting"
+            and (redo or not r["Hook (verify on site)"].startswith("gap:"))]
     all_searches = {**config.SEARCHES, **config.PAUSED_SEARCHES}
     for r in rows:
         search = next((s for s in all_searches.get(r["Niche"], []) if s[1] == r["City"]), None)
