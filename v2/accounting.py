@@ -58,9 +58,14 @@ def country(location: str) -> str:
     return "UK"
 
 
-def signature() -> str:
-    address = os.environ.get("POSTAL_ADDRESS", "").strip()
-    return config.SIGNATURE.format(postal_line=f"\n{address}" if address else "")
+OPT_OUT = 'If this isn\'t useful, just reply "no thanks" and I won\'t email again.'
+
+
+def signature(ctry: str) -> str:
+    """Name only. The postal address is required by CAN-SPAM, so US emails only.
+    The opt-out line stays for every country (UK GDPR art. 21, Australian Spam Act)."""
+    address = os.environ.get("POSTAL_ADDRESS", "").strip() if ctry == "US" else ""
+    return "Damilola Akinbobola" + (f"\n{address}" if address else "") + "\n\n" + OPT_OUT
 
 
 def pick_email(lead: dict, ctry: str) -> tuple[str, str]:
@@ -90,6 +95,6 @@ def build(lead: dict, location: str, greet: str) -> dict:
         return {"skip": why}
     name = re.sub(r"[\s,]+(ltd|limited|llp|plc|inc|llc|pllc|pty|pty ltd|p\.?c\.?)\.?$", "", short_name(lead["name"]), flags=re.I).strip()
     t = TEMPLATES[ctry]
-    body = "\n\n".join([greet, t["opener"].format(name=name), MIDDLE, t["ask"], signature()])
+    body = "\n\n".join([greet, t["opener"].format(name=name), MIDDLE, t["ask"], signature(ctry)])
     return {"subject": t["subject"].format(name=name), "body": body, "email": email,
             "evidence": f"{ctry}: site mentions \"{m.group(0)}\"", "skip": ""}
