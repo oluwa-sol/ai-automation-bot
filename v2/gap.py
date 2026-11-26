@@ -15,6 +15,15 @@ FEATURES = [
      "lets people book a time online, any hour of the day",
      "I couldn't find a way to book online"),
 ]
+# Extra features checked only for some niches.
+NICHE_FEATURES = {
+    "accounting": [
+        ("portal",
+         lambda l: bool(l.get("portal_tools")),
+         "lets clients upload their documents through a secure online portal",
+         "I couldn't find a client portal or upload page"),
+    ],
+}
 # Only features we can SEE on both sites. "Instant follow-up" was dropped: we can't
 # verify from outside how a business handles its inbox.
 
@@ -26,7 +35,7 @@ def short_name(name: str) -> str:
     return name.strip()
 
 
-def find_gap(lead: dict, competitors: list[dict]) -> dict | None:
+def find_gap(lead: dict, competitors: list[dict], niche: str | None = None) -> dict | None:
     """Return the strongest gap, or None if the lead already matches its competitors.
 
     Prefers the feature most competitors have, then the busiest competitor (most reviews).
@@ -34,7 +43,7 @@ def find_gap(lead: dict, competitors: list[dict]) -> dict | None:
     others = [c for c in competitors
               if c.get("site_ok") and short_name(c["name"]).lower() != short_name(lead["name"]).lower()]
     best = None
-    for key, has, they_do, lead_does in FEATURES:
+    for key, has, they_do, lead_does in FEATURES + NICHE_FEATURES.get(niche, []):
         if has(lead) or lead.get("chat_tools") and key == "chat":
             continue
         with_it = [c for c in others if has(c)]

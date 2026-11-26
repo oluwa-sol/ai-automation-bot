@@ -36,6 +36,11 @@ PROOF = {
         "website and social channels, qualifies it and books the call. First response went from "
         "1 to 5 hours to under 90 seconds, and cold enquiries get followed up automatically."
     ),
+    "accounting": (
+        "I built a follow-up system that checks which invoices are still unpaid, sends each client "
+        "a personal reminder at the right time and flags the tricky ones to a person. Overdue "
+        "payments dropped by 65% and it saves the team 60+ hours a month of chasing."
+    ),
     "med spa": (
         "I built an intake system for a client that replies to every new enquiry with a "
         "personalised message within 60 seconds (it used to take 19 hours) and prepares the "
@@ -105,7 +110,8 @@ Return JSON only: {{"subject": "...", "body": "..."}}"""
 
 NICHE_PLURAL = {"real estate": "real estate teams", "med spa": "med spas",
                 "home services": "home service companies", "law firm": "law firms",
-                "mortgage broker": "mortgage brokers"}
+                "mortgage broker": "mortgage brokers",
+                "accounting": "accounting firms"}
 
 
 def _gap_prompt(lead: dict, niche: str, gap: dict) -> str:

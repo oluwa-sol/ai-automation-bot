@@ -37,6 +37,8 @@ def score(lead: dict, niche: str) -> tuple[int, str, list[str]]:
 
     if niche == "med spa" and not lead.get("booking_tools"):
         s += 1; reasons.append("no online booking tool found")
+    if niche == "accounting" and not lead.get("portal_tools"):
+        s += 1; reasons.append("no client portal or upload tool found")
     if niche == "real estate" and not lead.get("crm"):
         s += 1; reasons.append("no lead CRM found on site")
 

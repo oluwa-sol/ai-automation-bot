@@ -22,6 +22,14 @@ SEARCHES = {
         ("personal injury law firm", "Houston, TX"),
         ("immigration law firm", "Miami, FL"),
     ],
+    # Admin Autopilot niche (Nov 2026): document chasing before tax deadlines.
+    "accounting": [
+        ("accounting firm", "Austin, TX"),
+        ("cpa firm", "Tampa, FL"),
+        ("tax preparation", "Phoenix, AZ"),
+        ("accountants", "Manchester, UK"),
+        ("bookkeeping firm", "Brisbane, Australia"),
+    ],
     "mortgage broker": [
         ("mortgage broker", "Austin, TX"),
         ("mortgage broker", "Brisbane, Australia"),

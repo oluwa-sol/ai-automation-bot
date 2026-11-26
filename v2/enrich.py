@@ -28,6 +28,16 @@ CHAT_TOOLS = {
     "leadconnectorhq": "GoHighLevel", "msgsndr": "GoHighLevel",
     "wa.me": "WhatsApp link", "manychat": "ManyChat",
 }
+# Client portals and document-collection tools used by accounting practices.
+PORTAL_TOOLS = {
+    "taxdome": "TaxDome", "karbonhq": "Karbon", "getcanopy": "Canopy", "canopytax": "Canopy",
+    "smartvault": "SmartVault", "sharefile": "ShareFile", "liscio": "Liscio",
+    "suralink": "Suralink", "contentsnare": "Content Snare", "ignitionapp": "Ignition",
+    "financial-cents": "Financial Cents", "financialcents": "Financial Cents",
+    "senta.co": "Senta", "getpixie": "Pixie", "fusesign": "FuseSign",
+    "verifyable": "Verifyable", "clienthub": "Client Hub", "safesend": "SafeSend",
+    "netclient": "NetClient CS", "client portal": "client portal", "secure upload": "secure upload",
+}
 REAL_ESTATE_CRMS = {
     "followupboss": "Follow Up Boss", "kvcore": "kvCORE", "lofty": "Lofty",
     "chime.me": "Lofty", "boomtownroi": "BoomTown", "sierrainteractive": "Sierra",
@@ -75,7 +85,7 @@ def _find(mapping: dict, html: str) -> list[str]:
 def enrich(lead: dict) -> dict:
     """Return the lead with website evidence added. Never raises."""
     base = lead.get("website", "")
-    out = {**lead, "booking_tools": [], "chat_tools": [], "crm": [], "slow_reply_text": "",
+    out = {**lead, "booking_tools": [], "chat_tools": [], "portal_tools": [], "crm": [], "slow_reply_text": "",
            "call_to_book": False, "contact_name": "", "contact_title": "",
            "site_emails": [], "has_form": False, "site_ok": False}
     home = _get(base) if base else None
@@ -89,6 +99,7 @@ def enrich(lead: dict) -> dict:
 
     out["booking_tools"] = _find(BOOKING_TOOLS, html)
     out["chat_tools"] = _find(CHAT_TOOLS, html)
+    out["portal_tools"] = _find(PORTAL_TOOLS, html)
     out["crm"] = _find(REAL_ESTATE_CRMS, html)
     out["has_form"] = any(s.find("form") for s in soups)
     out["call_to_book"] = bool(CALL_TO_BOOK_RE.search(text))

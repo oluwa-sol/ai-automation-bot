@@ -101,7 +101,7 @@ def process(lead: dict, niche: str, location: str, seen_emails: set, researched:
     seen_emails.add(lead["site_emails"][0].lower())
 
     points, hook, reasons = score(lead, niche)
-    gap = find_gap(lead, list(researched.values())) if researched else None
+    gap = find_gap(lead, list(researched.values()), niche) if researched else None
     if gap:  # a verified competitor gap is the strongest hook we have
         hook = hook_text(gap, lead["name"])
         points += 3
@@ -141,7 +141,7 @@ def regap(redo: bool = False):
         lead = researched.get(r["Business"]) or enrich({"name": r["Business"], "website": r["Website"],
                                                         "location": r["City"], "reviews": r["Reviews"]})
         lead.setdefault("location", r["City"])
-        gap = find_gap(lead, list(researched.values()))
+        gap = find_gap(lead, list(researched.values()), r["Niche"])
         if not gap:
             update(ws, r["_row"], **{"Draft issues": "regap: no competitor gap found, kept old draft"})
             print(f"  [regap] no gap: {r['Business']}")
