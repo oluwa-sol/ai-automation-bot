@@ -102,6 +102,10 @@ def process(lead: dict, niche: str, location: str, seen_emails: set, researched:
     seen_emails.add(lead["site_emails"][0].lower())
 
     if niche == "accounting":
+        big = accounting.big_firm(lead)
+        if big:
+            print(f"  [skip] big firm ({big}): {lead['name']}")
+            return None
         points, _, reasons = score(lead, niche)
         a = accounting.build(lead, location, greeting(lead))
         if a["skip"]:

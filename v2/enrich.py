@@ -109,6 +109,8 @@ def enrich(lead: dict) -> dict:
 
     for m in NAME_TITLE_RE.finditer(text):
         if _looks_like_person(m.group(1)):
+            if _shares_word(m.group(1), lead.get("name", "")):
+                continue  # the firm's own name read as a person
             out["contact_name"], out["contact_title"] = m.group(1), m.group(2)
             break
 
@@ -133,7 +135,17 @@ NOT_NAMES = {
     "about", "with", "and", "by", "from", "contact", "call", "book", "real", "estate",
     "team", "senior", "associate", "managing", "nurse", "registered", "aesthetic",
     "dr", "doctor", "founded", "owned", "local", "award", "top", "best", "new",
+    # firm and job words, so "Care Accountancy Professionals" or "Claire Needham Regional" is not a person
+    "accountancy", "accountants", "accountant", "accounting", "professionals", "professional",
+    "lending", "business", "regional", "partners", "partner", "tax", "taxes", "services", "group",
+    "ltd", "limited", "llp", "llc", "inc", "chartered", "advisors", "advisers", "solutions", "for",
+    "finance", "financial", "bookkeeping", "consulting", "company", "firm", "office", "head",
 }
+
+
+def _shares_word(name: str, business: str) -> bool:
+    biz = {w.lower() for w in re.findall(r"[A-Za-z]{3,}", business)}
+    return any(w.lower() in biz for w in name.split())
 
 
 def _looks_like_person(name: str) -> bool:

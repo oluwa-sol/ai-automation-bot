@@ -21,6 +21,26 @@ PERSONAL_TAX_RE = re.compile(
     r"personal (income )?tax returns?|form 1040|\b1040\b|individual returns?|"
     r"tax returns? for individuals|sole traders?|landlords?", re.I)
 
+# National and multi-office firms. Too big to need a small done-for-you build.
+BIG_FIRM_NAMES = re.compile(
+    r"\b(azets|bdo|kpmg|deloitte|pwc|pricewaterhouse|ernst|\bey\b|grant thornton|rsm|mazars|forvis|"
+    r"crowe|moore kingston|moore stephens|haines watts|menzies|bishop fleming|saffery|bdo|baker tilly|"
+    r"cla\b|cliftonlarsonallen|h&r block|h & r block|jackson hewitt|liberty tax|cbiz|plante moran|"
+    r"armanino|eide bailly|ryan llc|bentleys|pitcher partners|william buck|nexia|hlb|"
+    r"taxassist|tax assist|ets tax|itp accounting|etax|hood sweeney)\b", re.I)
+BIG_FIRM_URL = re.compile(r"/(our-)?(locations|offices)/|/en-(uk|gb|us|au)/", re.I)
+
+
+def big_firm(lead: dict) -> str:
+    """Return a reason if this looks like a national chain or multi-office firm, else ''."""
+    m = BIG_FIRM_NAMES.search(lead.get("name", ""))
+    if m:
+        return m.group(0)
+    if BIG_FIRM_URL.search(lead.get("website", "")):
+        return "multi-office website"
+    return ""
+
+
 COMPANY_RE = re.compile(r"\b(ltd|limited|llp|plc)\b\.?", re.I)
 
 TEMPLATES = {
